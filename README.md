@@ -5,7 +5,8 @@ Udacity project for Data Engineering Lesson
 ## About this Repository
 
 This is a Udacity project in Data-Science Nano-Degree. Tackling skills I learned in Data Engineering, Software Engineering and Machine Learning
-The fronend could be seen in this link: https://disaster-response-zeanrovin.herokuapp.com. In order to access classification feature, the app needs to be installed locally[Currently working on how to deploy both charts and classification feature online].
+The fronend could be seen in this link: https://disaster-response-zeanrovin.herokuapp.com. 
+* In order to access classification feature, the app needs to be installed locally[Currently working on how to deploy both charts and classification feature online].
 
 # Instructions for installation
 
