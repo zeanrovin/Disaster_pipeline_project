@@ -27,3 +27,4 @@ Run the following commands in the root directory of each file to set up your dat
              
    * Go to http://0.0.0.0:3001/
 	  
+etl_pipeline.py and ml_pipeline.py were used as preparation for ETL and training program.
