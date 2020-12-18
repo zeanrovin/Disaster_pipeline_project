@@ -96,7 +96,12 @@ def index():
             color='rgba(0,255,255, 0.2)',
             line=dict(color='rgba(0,255,255, 8.0)', width=3)
             )))
-
+    fig2.update_layout(
+    title=gobj.layout.Title(
+        text="Counts per Category",
+        xref="paper",
+        x=0))
+    #Display top 5 most counts 
     fig3 = gobj.Figure(gobj.Bar(
             x=second_tuple_elements,
             y=first_tuple_elements,
@@ -105,7 +110,12 @@ def index():
             color='rgba(0,255,255, 0.2)',
             line=dict(color='rgba(0,255,255, 8.0)', width=3)
             )))
-
+    fig3.update_layout(
+    title=gobj.layout.Title(
+        text="Top 5 categories with most counts",
+        xref="paper",
+        x=0))
+    #Display the least 5 most counts
     fig4 = gobj.Figure(gobj.Bar(
             x=second_tuple_bottom,
             y=first_tuple_bottom,
@@ -114,6 +124,11 @@ def index():
             color='rgba(255,0,0, 0.2)',
             line=dict(color='rgba(255,0,0, 8.0)', width=3)
             )))
+    fig4.update_layout(
+    title=gobj.layout.Title(
+        text="Top 5 categories with least counts",
+        xref="paper",
+        x=0))
 
             
 
