@@ -84,10 +84,8 @@ def build_model(X, y):
     return gs_clf
 
 def evaluate_model(model, X_test, y_test, category_names):
-    #gs_clf = GridSearchCV(model, param_grid=parameters,n_jobs=-1)
+    #see the score for each category
     y_pred = model.predict(X_test)
-
-
     y_pred_pd = pd.DataFrame(y_pred, columns = y_test.columns)
     for column in y_test.columns:
         print('------------------------------------------------------\n')
@@ -95,6 +93,7 @@ def evaluate_model(model, X_test, y_test, category_names):
         print(classification_report(y_test[column],y_pred_pd[column]))
 
 def save_model(model, model_filepath):
+    #save the model as a pkl file
     joblib.dump(model.best_estimator_, model_filepath)
 
 

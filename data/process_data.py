@@ -71,6 +71,7 @@ def clean_data(df):
 
 
 def save_data(df, database_filename):
+    #save the cleaned dataframe into a db file
     #drop table if exists
     dbpath = 'sqlite:///{}'.format(database_filename)
     table = 'messages_categories'
@@ -103,13 +104,6 @@ def main():
     save_data(df, database_filepath)
     
     print('Cleaned data saved to database!')
-
-    """ print('Please provide the filepaths of the messages and categories '\
-            'datasets as the first and second argument respectively, as '\
-            'well as the filepath of the database to save the cleaned data '\
-            'to as the third argument. \n\nExample: python process_data.py '\
-            'disaster_messages.csv disaster_categories.csv '\
-            'DisasterResponse.db') """
 
 
 if __name__ == '__main__':
