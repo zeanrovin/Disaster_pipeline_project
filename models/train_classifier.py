@@ -32,6 +32,12 @@ import numpy as np
 
 
 def load_data(database_filepath):
+    '''
+    Input: database_filepath(Provided in the main function)
+    This load the data produced in data/process_data.py file. Also returns X, y and category names to be used for
+    train test split
+    Output: X, y, categor_names
+    '''
     # Load dataset from database 
     db = sqlite3.connect('data/messages_categories.db')
     cursor = db.cursor()
@@ -39,14 +45,41 @@ def load_data(database_filepath):
     tables = cursor.fetchall()[0][0]
     df = pd.read_sql_query('SELECT * FROM '+tables,db)
 
+    print(df)
+
     X = df['message']
-    y = df[df.columns[5:]]
-    categor_names = df.columns[5:]
+    y = df[df.columns[4:]]
+    category_names = list(df.columns[4:])
 
-    return X, y, categor_names
+    print(y)
 
+    return X, y, category_names
+
+class StartingVerbExtractor(BaseEstimator, TransformerMixin):
+
+    def starting_verb(self, text):
+        sentence_list = nltk.sent_tokenize(text)
+        for sentence in sentence_list:
+            pos_tags = nltk.pos_tag(tokenize(sentence))
+            first_word, first_tag = pos_tags[0]
+            if first_tag in ['VB', 'VBP'] or first_word == 'RT':
+                return True
+        return False
+
+    def fit(self, x, y=None):
+        return self
+
+    def transform(self, X):
+        X_tagged = pd.Series(X).apply(self.starting_verb)
+        return pd.DataFrame(X_tagged)
 
 def tokenize(text):
+    '''
+    Input: Messages from X
+
+    Output: tokenized and lemmetize text for improved model
+
+    '''
     # normalize text and remove punctuation
     text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
     
@@ -54,8 +87,6 @@ def tokenize(text):
     tokens = word_tokenize(text)
     stop_words = stopwords.words("english")
     words = [w for w in tokens if w not in stop_words]
-    
-
     
     # Reduce words to their root form
     lemmatizer = WordNetLemmatizer()
@@ -65,22 +96,27 @@ def tokenize(text):
 
 
 def build_model(X, y):
-    pipeline = Pipeline([('vect', CountVectorizer()),
-                     ('tfidf', TfidfTransformer()),
-                     ('clf', MultiOutputClassifier(BernoulliNB()))])
-    
-    parameters = {'vect__max_df': (0.5, 0.75, 1.0),
-            'vect__ngram_range': ((1, 1), (1,2)),
-            'vect__max_features': (None, 5000,10000),
-            'tfidf__use_idf': (True, False)}
+    '''
+    Input: X_train, y_train = from train test split in main function
 
+    Output: Model using the pipeline and best parameters using grid search
+    '''
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
+        ('tfidf', TfidfTransformer()),
+        ('clf',MultiOutputClassifier(RandomForestClassifier(n_jobs=-1))),
+    ])
+
+    
+    parameters = {
+    'vect__max_df': (0.5, 0.75, 1.0),
+    'vect__ngram_range': ((1, 1), (1,2)),
+    'vect__max_features': (None, 5000,10000),
+    'tfidf__use_idf': (True, False)
+            }
 
     gs_clf = GridSearchCV(pipeline, param_grid=parameters,n_jobs=-1)
-    
-    X_train, X_test, y_train, y_test = train_test_split(X, y)
 
-    gs_clf = gs_clf.fit(X_train, y_train)
-    
     return gs_clf
 
 def evaluate_model(model, X_test, y_test, category_names):
@@ -103,13 +139,15 @@ def main():
     model_filepath = 'models/model1.pkl'
     print('Loading data...\n    DATABASE: {}'.format(database_filepath))
     X, y, category_names = load_data(database_filepath)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+    print(X, y, category_names)
+    X_train, X_test, y_train, y_test = train_test_split(X, y)
     
     print('Building model...')
     model = build_model(X, y)
-    
+
     print('Training model...')
-    model.fit(X_train, y_train)
+    model.fit(X_train, y_train) 
     
     print('Evaluating model...')
     evaluate_model(model, X_test, y_test, category_names)
