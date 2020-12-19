@@ -55,24 +55,6 @@ def load_data(database_filepath):
 
     return X, y, category_names
 
-class StartingVerbExtractor(BaseEstimator, TransformerMixin):
-
-    def starting_verb(self, text):
-        sentence_list = nltk.sent_tokenize(text)
-        for sentence in sentence_list:
-            pos_tags = nltk.pos_tag(tokenize(sentence))
-            first_word, first_tag = pos_tags[0]
-            if first_tag in ['VB', 'VBP'] or first_word == 'RT':
-                return True
-        return False
-
-    def fit(self, x, y=None):
-        return self
-
-    def transform(self, X):
-        X_tagged = pd.Series(X).apply(self.starting_verb)
-        return pd.DataFrame(X_tagged)
-
 def tokenize(text):
     '''
     Input: Messages from X
@@ -104,7 +86,7 @@ def build_model(X, y):
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
-        ('clf',MultiOutputClassifier(RandomForestClassifier(n_jobs=-1))),
+        ('clf',MultiOutputClassifier(RandomForestClassifier())),
     ])
 
     
@@ -115,7 +97,7 @@ def build_model(X, y):
     'tfidf__use_idf': (True, False)
             }
 
-    gs_clf = GridSearchCV(pipeline, param_grid=parameters,n_jobs=-1)
+    gs_clf = GridSearchCV(pipeline, param_grid=parameters)
 
     return gs_clf
 
@@ -134,29 +116,33 @@ def save_model(model, model_filepath):
 
 
 def main():
+    if len(sys.argv) == 3:
+        database_filepath, model_filepath = sys.argv[1:]
     
-    database_filepath = 'data/messages_categories.db'
-    model_filepath = 'models/model1.pkl'
-    print('Loading data...\n    DATABASE: {}'.format(database_filepath))
-    X, y, category_names = load_data(database_filepath)
+        print('Loading data...\n    DATABASE: {}'.format(database_filepath))
+        X, y, category_names = load_data(database_filepath)
 
-    print(X, y, category_names)
-    X_train, X_test, y_train, y_test = train_test_split(X, y)
-    
-    print('Building model...')
-    model = build_model(X, y)
+        print(X, y, category_names)
+        X_train, X_test, y_train, y_test = train_test_split(X, y)
+        
+        print('Building model...')
+        model = build_model(X, y)
 
-    print('Training model...')
-    model.fit(X_train, y_train) 
-    
-    print('Evaluating model...')
-    evaluate_model(model, X_test, y_test, category_names)
+        print('Training model...')
+        model.fit(X_train, y_train) 
+        
+        print('Evaluating model...')
+        evaluate_model(model, X_test, y_test, category_names)
 
-    print('Saving model...\n    MODEL: {}'.format(model_filepath))
-    save_model(model, model_filepath)
+        print('Saving model...\n    MODEL: {}'.format(model_filepath))
+        save_model(model, model_filepath)
 
-    print('Trained model saved!')
+        print('Trained model saved!')
 
-
+    else:
+        print('Please provide the filepath of the disaster messages database '\
+              'as the first argument and the filepath of the pickle file to '\
+              'save the model to as the second argument. \n\nExample: python '\
+              'train_classifier.py ../data/DisasterResponse.db classifier.pkl')
 if __name__ == '__main__':
     main()

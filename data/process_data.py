@@ -55,7 +55,12 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)
     print(df.columns)
     print("after concat:", df)
+
+    #drop the categories column as it no longer makes any purpose
     df = df.drop(columns = ['categories'])
+
+    #'related' column has 3 unique values[0,1,2], we'll treat 2 as 1
+    df['related'].replace({2 : 1})
 
     # check number of duplicates
     print(sum(df.duplicated()))
@@ -90,22 +95,29 @@ def save_data(df, database_filename):
 
 
 def main():
+    if len(sys.argv) == 4:
 
-    messages_filepath = 'data/messages.csv'
-    categories_filepath = 'data/categories.csv' 
-    database_filepath = 'data/messages_categories.db'
+        messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
 
-    print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
-            .format(messages_filepath, categories_filepath))
-    df = load_data(messages_filepath, categories_filepath)
+        print('Loading data...\n    MESSAGES: {}\n    CATEGORIES: {}'
+                .format(messages_filepath, categories_filepath))
+        df = load_data(messages_filepath, categories_filepath)
 
-    print('Cleaning data...')
-    df = clean_data(df)
+        print('Cleaning data...')
+        df = clean_data(df)
+        
+        print('Saving data...\n    DATABASE: {}'.format(database_filepath))
+        save_data(df, database_filepath)
+        
+        print('Cleaned data saved to database!')
     
-    print('Saving data...\n    DATABASE: {}'.format(database_filepath))
-    save_data(df, database_filepath)
-    
-    print('Cleaned data saved to database!')
+    else:
+        print('Please provide the filepaths of the messages and categories '\
+              'datasets as the first and second argument respectively, as '\
+              'well as the filepath of the database to save the cleaned data '\
+              'to as the third argument. \n\nExample: python process_data.py '\
+              'disaster_messages.csv disaster_categories.csv '\
+              'DisasterResponse.db')
 
 
 if __name__ == '__main__':
