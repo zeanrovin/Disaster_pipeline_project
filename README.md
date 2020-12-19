@@ -11,39 +11,39 @@ The fronend could be seen in this link: https://disaster-response-zeanrovin.hero
 This web app will help the organzation classifying the emergency messages on what category they fall in. As they will receive thousands of messages, this will improve where they need to put most attention to
 
 # File Structure
-app
-| - template
-| |- master.html # main page of web app
-| |- go.html # classification result page of web app
-|- run.py # Flask file that runs app
-data
-|- disaster_categories.csv # data to process
-|- disaster_messages.csv # data to process
-|- process_data.py #merge two cv, clean and outputs a db file
-|- messages_categories.db # database to save clean data to
-models
-|- train_classifier.py #train the data and outputs a pkl file
-|- classifier.pkl # saved model
-web_app #this folder is for heroku deployment
-| - disasterapp
-| | -app
-| | - template
-| | | - master.html # main page of web app
-| | | - go.html # classification result page of web app
-|- run.py # Flask file that runs app
-| | -data
-| | | - disaster_categories.csv # data to process
-| | | - disaster_messages.csv # data to process
-| | | - process_data.py #merge two cv, clean and outputs a db file
-| | | - messages_categories.db # database to save clean data to
-| | -models
-| | | - train_classifier.py #train the data and outputs a pkl file
-| | | - classifier.pkl # saved model
-| | - Procfile #Procfile needed for heroki
-| | - requirements.txt #Installation needed to deploy online
-etl_pipeline.py #used as preparation for data/process_data.py (personal notes)
-ml_pipeline.py #used as preparation for models/train_classifier.py (personal notes)
-README.md
+	app
+	| - template
+	| |- master.html # main page of web app
+	| |- go.html # classification result page of web app
+	|- run.py # Flask file that runs app
+	data
+	|- disaster_categories.csv # data to process
+	|- disaster_messages.csv # data to process
+	|- process_data.py #merge two cv, clean and outputs a db file
+	|- messages_categories.db # database to save clean data to
+	models
+	|- train_classifier.py #train the data and outputs a pkl file
+	|- classifier.pkl # saved model
+	web_app #this folder is for heroku deployment
+	| - disasterapp
+	| | -app
+	| | - template
+	| | | - master.html # main page of web app
+	| | | - go.html # classification result page of web app
+	|- run.py # Flask file that runs app
+	| | -data
+	| | | - disaster_categories.csv # data to process
+	| | | - disaster_messages.csv # data to process
+	| | | - process_data.py #merge two cv, clean and outputs a db file
+	| | | - messages_categories.db # database to save clean data to
+	| | -models
+	| | | - train_classifier.py #train the data and outputs a pkl file
+	| | | - classifier.pkl # saved model
+	| | - Procfile #Procfile needed for heroki
+	| | - requirements.txt #Installation needed to deploy online
+	etl_pipeline.py #used as preparation for data/process_data.py (personal notes)
+	ml_pipeline.py #used as preparation for models/train_classifier.py (personal notes)
+	README.md
 
 # Instructions for installation
 
