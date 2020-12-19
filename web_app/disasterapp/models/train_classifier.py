@@ -32,6 +32,12 @@ import numpy as np
 
 
 def load_data(database_filepath):
+        '''
+    Input: database_filepath(Provided in the main function)
+    This load the data produced in data/process_data.py file. Also returns X, y and category names to be used for
+    train test split
+    Output: X, y, categor_names
+    '''
     # Load dataset from database 
     db = sqlite3.connect('data/messages_categories.db')
     cursor = db.cursor()
@@ -40,13 +46,19 @@ def load_data(database_filepath):
     df = pd.read_sql_query('SELECT * FROM '+tables,db)
 
     X = df['message']
-    y = df[df.columns[5:]]
-    categor_names = df.columns[5:]
+    y = df[df.columns[4:]]
+    category_names = list(df.columns[4:])
 
     return X, y, categor_names
 
 
 def tokenize(text):
+    '''
+    Input: Messages from X
+
+    Output: tokenized and lemmetize text for improved model
+
+    '''
     # normalize text and remove punctuation
     text = re.sub(r"[^a-zA-Z0-9]", " ", text.lower())
     
@@ -65,9 +77,15 @@ def tokenize(text):
 
 
 def build_model(X, y):
-    pipeline = Pipeline([('vect', CountVectorizer()),
+    '''
+    Input: X_train, y_train = from train test split in main function
+
+    Output: Model using the pipeline and best parameters using grid search
+    '''
+    pipeline = Pipeline([
+        ('vect', CountVectorizer(tokenizer=tokenize)),
                      ('tfidf', TfidfTransformer()),
-                     ('clf', MultiOutputClassifier(BernoulliNB()))])
+                     ('clf', MultiOutputClassifier(RandomForestClassifier()))])
     
     parameters = {'vect__max_df': (0.5, 0.75, 1.0),
             'vect__ngram_range': ((1, 1), (1,2)),

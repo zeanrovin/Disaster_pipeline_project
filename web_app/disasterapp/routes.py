@@ -43,8 +43,8 @@ def index():
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
 
-    categories = list(df.columns[5:])
-    categories_counts = list(df.iloc[:,5:].sum())
+    categories = list(df.columns[4:])
+    categories_counts = list(df.iloc[:,4:].sum())
 
     top_count = sorted(zip(categories_counts, categories), reverse=True)[:5]
     bottom_count = sorted(zip(categories_counts, categories), reverse=False)[:5]

@@ -55,6 +55,12 @@ def clean_data(df):
     df = pd.concat([df, categories], axis=1)
     print(df.head())
 
+    #drop the categories column as it no longer makes any purpose
+    df = df.drop(columns = ['categories'])
+
+    #'related' column has 3 unique values[0,1,2], we'll treat 2 as 1
+    df['related'].replace({2 : 1})
+
     # check number of duplicates
     print(sum(df.duplicated()))
 
