@@ -53,7 +53,9 @@ def clean_data(df):
 
     # concatenate the original dataframe with the new `categories` dataframe
     df = pd.concat([df, categories], axis=1)
-    print(df.head())
+    print(df.columns)
+    print("after concat:", df)
+    df = df.drop(columns = ['categories'])
 
     # check number of duplicates
     print(sum(df.duplicated()))
