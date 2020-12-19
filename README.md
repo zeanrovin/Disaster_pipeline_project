@@ -8,7 +8,7 @@ This is a Udacity project in Data-Science Nano-Degree. Tackling skills I learned
 The fronend could be seen in this link: https://disaster-response-zeanrovin.herokuapp.com. 
 * In order to access classification feature, the app needs to be installed locally[Currently working on how to deploy both charts and classification feature online].
 
-This web app will help the organzation classifying the emergency messages on what category they fall in. As they will receive thousands of messages, this will improve where they need to put most attention to
+This web app will help the organzation classifying the emergency messages on what category they fall in. As they will receive thousands of messages in various forms in the midst disaster(direct message, news reports, tweets etc.), this will improve where they need to put most attention to.
 
 # File Structure
 	app
@@ -59,11 +59,11 @@ Run the following commands in the root directory of each file to set up your dat
 
   * To run ETL pipeline that cleans data and stores in db file: 
   
-               python data/process_data.py
+               python data/process_data.py data/messages.csv data/categories.csv data/messages_categories.csv
     
   * To run ML pipeline that trains classifier and saves it into a pickle file: 
   
-               python models/train_classifier.py
+               python models/train_classifier.py data/messages_categories.db models/model1.pkl
                
   * Run the following command in the app's directory to run your web app: 
   
