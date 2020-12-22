@@ -59,7 +59,7 @@ Run the following commands in the root directory of each file to set up your dat
 
   * To run ETL pipeline that cleans data and stores in db file: 
   
-               python data/process_data.py data/messages.csv data/categories.csv data/messages_categories.csv
+               python data/process_data.py data/messages.csv data/categories.csv data/messages_categories.db
     
   * To run ML pipeline that trains classifier and saves it into a pickle file: 
   
