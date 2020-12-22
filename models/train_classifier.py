@@ -116,6 +116,12 @@ def save_model(model, model_filepath):
 
 
 def main():
+    """"
+    Input in the cmd: 'python models/train_classifier.py data/messages_categories.db models/model1.pkl'
+    ***[1] python models/train_classifier.py - to run the program
+    ***[2] data/messages_categories.db: Database that was profduced by data/process_data.py
+    ***[3] models/model1.pkl: Pickle file that will be prodcued by this program(models/train_classifier.py)
+    """
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
     

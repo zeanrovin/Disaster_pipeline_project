@@ -95,6 +95,15 @@ def save_data(df, database_filename):
 
 
 def main():
+    """"
+    Input in the cmd: 'python data/process_data.py data/messages.csv data/categories.csv 
+    data/messages_categories.db'
+'
+    ***[1] python data/process_data.py - to run the program
+    ***[2] data/messages.csv: CSV file to be ETL
+    ***[3] data/categories.csv: CSV file to be ETL
+    ***[4] data/messages_categories.db: Output of the this ETL program(process_data.py)
+    """
     if len(sys.argv) == 4:
 
         messages_filepath, categories_filepath, database_filepath = sys.argv[1:]
